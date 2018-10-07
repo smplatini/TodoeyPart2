@@ -5,14 +5,23 @@ class TodoListViewController: UITableViewController {
     var itemArray = ["Find Mike", "Buy Eggs",
                      "Destroy Demogoron"]
     
- 
     
+    //Data persistance
+
+    let defaults = UserDefaults.standard
  
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+    
+        //load data from memory
+        if let items = UserDefaults.standard.array(forKey: "TodoListArray") as? [String]{
+            itemArray = items
+            
+        }
+        
         
     }
+    
     
     //Important functions that must be implemented for table views(Protocols)
     // ***************************************************************************************//
@@ -75,18 +84,19 @@ class TodoListViewController: UITableViewController {
         //UI alert window
         let alert = UIAlertController(title: "Add New Todoey Item ", message: "", preferredStyle: .alert)
         
+       
+        //UI alert action closure
+         /* ***** what will happen once the user clicks the Add Item button on our UIAlert *********  */
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
-            
-            //what will happen once the user clicks the Add Item button on our UIAlert
-            
+        
            // print(textField.text)
-          
             self.itemArray.append(textField.text!)
             
+            //Saving data for reuse
+            self.defaults.set(self.itemArray, forKey: "TodoListArray")
+            
            //Item array is modified but will not show until we reload data
-            
             self.tableView.reloadData()
-            
             
         }
         
